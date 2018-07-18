@@ -1,0 +1,11 @@
+{
+  "name": "viewserver-dao-middleware",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "protobufjs": "^6.8.0",
+    "redux-seamless-immutable": "^0.4.0",
+    "rxjs": "^5.5.2"
+  }
+}
