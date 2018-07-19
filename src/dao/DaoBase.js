@@ -1,6 +1,6 @@
 import Logger from '../common/Logger';
 import Rx from 'rxjs/Rx';
-import {page} from '../common/dao/DaoExtensions';
+import {page} from './DaoExtensions';
 import {isEqual} from 'lodash';
 import RxDataSink from '../dataSinks/RxDataSink';
 

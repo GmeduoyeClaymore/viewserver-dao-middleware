@@ -1,4 +1,4 @@
-import {REGISTER_DAO_ACTION, UNREGISTER_DAO_ACTION, INVOKE_DAO_COMMAND, UPDATE_COMMAND_STATUS} from '../common/dao/ActionConstants';
+import {REGISTER_DAO_ACTION, UNREGISTER_DAO_ACTION, INVOKE_DAO_COMMAND, UPDATE_COMMAND_STATUS} from './ActionConstants';
 import {getDaoOptions, getDaoCommandStateObject} from './DaoStateUtils';
 import {isEqual} from 'lodash';
 
