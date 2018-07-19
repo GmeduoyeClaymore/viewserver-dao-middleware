@@ -1,2 +1,2 @@
-export * from './DataSink';
-export * from './RxDataSink';
+export {default as DataSink} from './DataSink';
+export {default as RxDataSink} from './RxDataSink';

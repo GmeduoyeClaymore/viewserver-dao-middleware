@@ -1,6 +1,6 @@
 import {debounce, pickBy} from 'lodash';
 
-export default class DataSourceSubscriptionStrategyStrategy{
+export default class DataSourceSubscriptionStrategy{
   constructor(client, path, dataSink){
     this.client = client;
     this.dataSink = dataSink;
