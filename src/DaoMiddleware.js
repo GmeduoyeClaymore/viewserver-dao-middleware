@@ -12,6 +12,16 @@ const listMethodNames = (object, downToClass = Object) => {
   return props.sort().filter((e, i, arr) => e != arr[ i + 1] && typeof object[e] == 'function');
 };
 
+const DAO_SUBSCRIPTIONS = {};
+const DAO_OPTIONS_SUBSCRIPTIONS = {};
+const DAO_COUNT_SUBSCRIPTIONS = {};
+const DAOS = {};
+const DAO_SNAPSHOT_COMPLETE_SUBSCRIPTIONS = {};
+export const DAO_REGISTRATION_CONTEXT = {
+  daos : DAOS,
+  registrationSubject : new Rx.Subject()
+}
+
 export default DaoMiddleware = ({ getState, dispatch }) => {
   //TODO - find a better way of passing dispatch to the dao objects
 
@@ -37,17 +47,6 @@ export default DaoMiddleware = ({ getState, dispatch }) => {
         dispatch({ type: UPDATE_COMMAND_STATUS(action.daoName, action.method), path, data: {status: 'fail', message: action.daoName + '/' + action.method + ' ' +  (error.message ? error.message : error)} });
       });
   };
-
-  const DAO_SUBSCRIPTIONS = {};
-  const DAO_OPTIONS_SUBSCRIPTIONS = {};
-  const DAO_COUNT_SUBSCRIPTIONS = {};
-  const DAOS = {};
-  const DAO_SNAPSHOT_COMPLETE_SUBSCRIPTIONS = {};
-  export const DAO_REGISTRATION_CONTEXT = {
-    daos : DAOS,
-    registrationSubject : new Rx.Subject()
-  }
-  
 
   const registerDao = ({name, dao}) => {
     if (DAOS[name]){
