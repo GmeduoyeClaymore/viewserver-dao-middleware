@@ -1,6 +1,8 @@
 
 import {REGISTER_DAO_ACTION, UNREGISTER_DAO_ACTION, UPDATE_STATE, UPDATE_OPTIONS, UPDATE_COMMAND_STATUS, INVOKE_DAO_COMMAND} from './dao/ActionConstants';
 import Logger from './common/Logger';
+import Rx from 'rxjs/Rx';
+
 const listMethodNames = (object, downToClass = Object) => {
   // based on code by Muhammad Umer, https://stackoverflow.com/a/31055217/441899
   let props = [];
@@ -41,6 +43,11 @@ export default DaoMiddleware = ({ getState, dispatch }) => {
   const DAO_COUNT_SUBSCRIPTIONS = {};
   const DAOS = {};
   const DAO_SNAPSHOT_COMPLETE_SUBSCRIPTIONS = {};
+  export const DAO_REGISTRATION_CONTEXT = {
+    daos : DAOS,
+    registrationSubject : new Rx.Subject()
+  }
+  
 
   const registerDao = ({name, dao}) => {
     if (DAOS[name]){
@@ -59,6 +66,11 @@ export default DaoMiddleware = ({ getState, dispatch }) => {
       const sub = dao.observable.subscribe(daoEventFunc);
       DAO_SUBSCRIPTIONS[name] = sub;
     }
+
+    if(dao.setRegistrationContext){
+      dao.setRegistrationContext(DAO_REGISTRATION_CONTEXT);
+    }
+    DAO_REGISTRATION_CONTEXT.registrationSubject.next(dao);
 
     if (dao.optionsObservable){
       let daoOptionFunc = c => {
