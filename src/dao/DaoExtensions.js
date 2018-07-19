@@ -1,5 +1,5 @@
 
-import Logger from 'common/Logger';
+import Logger from '../common/Logger';
 
 export const page = dao => ({offset, limit}) => {
   const {rows, totalRowCount} = dao.dataSink;

@@ -1,6 +1,6 @@
 
-import {REGISTER_DAO_ACTION, UNREGISTER_DAO_ACTION, UPDATE_STATE, UPDATE_OPTIONS, UPDATE_COMMAND_STATUS, INVOKE_DAO_COMMAND} from 'common/dao/ActionConstants';
-import Logger from 'common/Logger';
+import {REGISTER_DAO_ACTION, UNREGISTER_DAO_ACTION, UPDATE_STATE, UPDATE_OPTIONS, UPDATE_COMMAND_STATUS, INVOKE_DAO_COMMAND} from './dao/ActionConstants';
+import Logger from './common/Logger';
 const listMethodNames = (object, downToClass = Object) => {
   // based on code by Muhammad Umer, https://stackoverflow.com/a/31055217/441899
   let props = [];

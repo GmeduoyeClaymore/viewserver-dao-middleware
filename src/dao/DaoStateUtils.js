@@ -1,4 +1,4 @@
-import Logger from 'common/Logger';
+import Logger from '../common/Logger';
 import {isEqual} from 'lodash';
 
 export const getDaoCommandStateObject = (state, commandName, daoName) => {

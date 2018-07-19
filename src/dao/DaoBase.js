@@ -1,8 +1,8 @@
-import Logger from 'common/Logger';
+import Logger from '../common/Logger';
 import Rx from 'rxjs/Rx';
-import {page} from 'common/dao/DaoExtensions';
+import {page} from '../common/dao/DaoExtensions';
 import {isEqual} from 'lodash';
-import RxDataSink from '../../common/dataSinks/RxDataSink';
+import RxDataSink from '../dataSinks/RxDataSink';
 
 
 export default class Dao {

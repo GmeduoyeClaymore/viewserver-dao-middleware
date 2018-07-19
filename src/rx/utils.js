@@ -1,5 +1,5 @@
 import Rx from 'rxjs/Rx';
-import RxDataSink from 'common/dataSinks/RxDataSink';
+import RxDataSink from '../common/dataSinks/RxDataSink';
 
 const DOMAIN_EVENT_TYPES = [RxDataSink.ROW_ADDED, RxDataSink.ROW_UPDATED, RxDataSink.ROW_REMOVED, RxDataSink.DATA_RESET, RxDataSink.SNAPSHOT_COMPLETE ];
 
