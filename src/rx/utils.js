@@ -1,7 +1,9 @@
 import Rx from 'rxjs/Rx';
 import RxDataSink from '../dataSinks/RxDataSink';
 
-const DOMAIN_EVENT_TYPES = [RxDataSink.ROW_ADDED, RxDataSink.ROW_UPDATED, RxDataSink.ROW_REMOVED, RxDataSink.DATA_RESET, RxDataSink.SNAPSHOT_COMPLETE ];
+export const ERROR = 'Error';
+export const SUCCESS = 'Success';
+const DOMAIN_EVENT_TYPES = [RxDataSink.ROW_ADDED, RxDataSink.ROW_UPDATED, RxDataSink.ROW_REMOVED, RxDataSink.DATA_RESET, RxDataSink.SNAPSHOT_COMPLETE,ERROR, SUCCESS ];
 
 Rx.Observable.prototype.timeoutWithError = function (timeout, error) {
   return this.timeoutWith(timeout, Rx.Observable.throw(error));
@@ -25,6 +27,18 @@ Rx.Observable.prototype.waitForSnapshotComplete = function (timeout = 10000) {
     .take(1)
     .flatMap(c => checkForErrorEventTypes(c))
     .timeoutWithError(timeout, new Error(`No snapshot complete event detected ${timeout} millis seconds after update`));
+};
+
+Rx.Observable.prototype.waitForSuccess = function (timeout = 10000) {
+  return this.filter(ev => SUCCESS === ev.Type || ERROR === ev.Type)
+    .take(1)
+    .timeoutWithError(timeout, new Error('No success or error detected within 10 seconds'))
+    .map(ev => {
+      if(ev.Type === ERROR){
+        throw new Error(ev.error)
+      }
+      return ev;
+    });
 };
 
 Rx.Observable.prototype.filterRowEvents = function () {
