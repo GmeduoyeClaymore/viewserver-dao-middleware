@@ -12,10 +12,6 @@ const listMethodNames = (object, downToClass = Object) => {
   return props.sort().filter((e, i, arr) => e != arr[ i + 1] && typeof object[e] == 'function');
 };
 
-
-
-export const  DaoMiddleware = ({ getState, dispatch }) => {
-
 const DAO_SUBSCRIPTIONS = {};
 const DAO_OPTIONS_SUBSCRIPTIONS = {};
 const DAO_COUNT_SUBSCRIPTIONS = {};
@@ -25,6 +21,8 @@ export const DAO_REGISTRATION_CONTEXT = {
   daos : DAOS,
   registrationSubject : new Rx.Subject()
 }
+
+export const  DaoMiddleware = ({ getState, dispatch }) => {
   //TODO - find a better way of passing dispatch to the dao objects
 
   const asyncDispatch = (action, promiseOrFactory) => {
