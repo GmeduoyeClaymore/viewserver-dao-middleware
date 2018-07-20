@@ -109,7 +109,7 @@ export default class Dao {
       
       this.dataSink = this.daoContext.createDataSink(newOptions);
       this.dataSink.name = this.daoContext.name;
-      this.subscriptionStrategy = this.daoContext.createSubscriptionStrategy(newOptions, this.dataSink);
+      this.subscriptionStrategy = await this.daoContext.createSubscriptionStrategy(newOptions, this.dataSink);
 
       this.rowEventObservable = this.dataSink.dataSinkUpdated.filterRowEvents();
       this.countSubscription = this.dataSink.dataSinkUpdated.filter(ev => ev.Type === RxDataSink.TOTAL_ROW_COUNT).subscribe(ev => this.countSubject.next(ev.count));
