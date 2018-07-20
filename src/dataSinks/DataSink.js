@@ -1,8 +1,7 @@
 import Logger from '../common/Logger';
 
-export const DataSink = (superclass) => class extends superclass {
+export class DataSink {
   constructor(name){
-    super();
     this.name = name;
     this.schema = {};
     this.columnsByName = {};
@@ -24,9 +23,6 @@ export const DataSink = (superclass) => class extends superclass {
   onSnapshotComplete(){
     this.isSnapshotComplete = true;
     Logger.info(this.name + ' - Snapshot complete');
-    if (super.onSnapshotComplete){
-      super.onSnapshotComplete();
-    }
   }
 
   onSuccess(){
@@ -67,9 +63,6 @@ export const DataSink = (superclass) => class extends superclass {
   }
 
   onDataReset(){
-    if (super.onDataReset){
-      super.onDataReset();
-    }
     Logger.info(this.name + ' - Data reset');
     this.rows = [];
     this._orderedRows = undefined;
@@ -95,24 +88,15 @@ export const DataSink = (superclass) => class extends superclass {
   }
 
   onTotalRowCount(count){
-    if (super.onTotalRowCount){
-      super.onTotalRowCount(count);
-    }
     this.totalRowCount = count;
     Logger.info(this.name + ' - Total row count is - ' + this.totalRowCount);
   }
 
   onSchemaReset(){
-    if (super.onSchemaReset){
-      super.onSchemaReset();
-    }
     this.schema = {};
   }
 
   onRowAdded(rowId, row){
-    if (super.onRowAdded){
-      super.onRowAdded(rowId, row);
-    }
     row.key = rowId;
     this.idIndexes[rowId] = this.rows.length;
     this.idRows[rowId] = row;
@@ -123,9 +107,6 @@ export const DataSink = (superclass) => class extends superclass {
   }
 
   onRowUpdated(rowId, row){
-    if (super.onRowUpdated){
-      super.onRowUpdated(rowId, row);
-    }
     const rowIndex = this._getRowIndex(rowId);
     if (!~rowIndex){
       Logger.info(this.name + ' - Row not updated as couldnt get index for row ' + rowId);
@@ -136,9 +117,6 @@ export const DataSink = (superclass) => class extends superclass {
   }
 
   onRowRemoved(rowId){
-    if (super.onRowRemoved){
-      super.onRowRemoved(rowId);
-    }
     const rowIndex = this._getRowIndex(rowId);
     if (!!~rowIndex){
       delete this.idIndexes[rowId];
@@ -156,18 +134,12 @@ export const DataSink = (superclass) => class extends superclass {
 
   onColumnAdded(colId, col){
     Logger.fine(this.name + `column added - ${colId} -  + ${JSON.stringify(col)}`);
-    if (super.onColumnAdded){
-      super.onColumnAdded(colId, col);
-    }
     const newCol = {...col, colId};
     this.schema[colId] = newCol;
     this.columnsByName[col.name] = newCol;
   }
 
   onColumnRemoved(colId){
-    if (super.onColumnRemoved){
-      super.onColumnRemoved(colId);
-    }
     const col = this.schema[colId];
     if (col){
       delete this.columnsByName[col.name];
