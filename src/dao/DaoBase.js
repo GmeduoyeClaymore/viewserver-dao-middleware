@@ -9,6 +9,7 @@ export default class Dao {
   constructor(daoContext) {
     this.daoContext = daoContext;
     this.subject = new Rx.Subject();
+    this.rawDataSubject = new Rx.Subject();
     this.optionsSubject = new Rx.Subject();
     this.countSubject = new Rx.Subject();
     this.snapshotCompleteSubject = new Rx.Subject();
@@ -42,6 +43,10 @@ export default class Dao {
       Logger.info('Handling reconnection logic - ' + this.name);
       this.updateSubscription(this.options, true);
     }
+  }
+
+  get rawDataObservable(){
+    return this.rawDataSubject;
   }
     
   get observable(){
@@ -98,6 +103,9 @@ export default class Dao {
         Logger.info(`Disposing of row event subscription - ${this.daoContext.name}`);
         this.rowEventSubscription.unsubscribe();
       }
+      if (this.rawDataEventSubscription){
+        this.rawDataEventSubscription.unsubscribe();
+      }
       if (this.countSubscription){
         Logger.info(`Disposing of row count subscription - ${this.daoContext.name}`);
         this.countSubscription.unsubscribe();
@@ -120,7 +128,7 @@ export default class Dao {
           this.subject.next(this.daoContext.mapDomainEvent(this.dataSink, ev));
         }
       });
-
+      this.rawDataEventSubscription = this.dataSink.dataSinkUpdated.subscribe(ev => this.rawDataSubject.next(ev));
       Logger.info(`Updating subscription for  ${this.daoContext.name}`);
     }
 
