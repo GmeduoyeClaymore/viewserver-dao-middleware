@@ -22,7 +22,7 @@ export const DAO_REGISTRATION_CONTEXT = {
   registrationSubject : new Rx.Subject()
 }
 
-export default DaoMiddleware = ({ getState, dispatch }) => {
+export const  DaoMiddleware = ({ getState, dispatch }) => {
   //TODO - find a better way of passing dispatch to the dao objects
 
   const asyncDispatch = (action, promiseOrFactory) => {
@@ -156,3 +156,5 @@ export default DaoMiddleware = ({ getState, dispatch }) => {
     return next(action);
   };
 };
+
+export default DaoMiddleware; 

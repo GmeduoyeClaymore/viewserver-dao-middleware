@@ -1,6 +1,6 @@
 import Logger from '../common/Logger';
 
-export default DataSink = (superclass) => class extends superclass {
+export const DataSink = (superclass) => class extends superclass {
   constructor(name){
     super();
     this.name = name;
@@ -193,3 +193,5 @@ export default DataSink = (superclass) => class extends superclass {
     return rowIndex;
   }
 };
+
+export default DataSink;
