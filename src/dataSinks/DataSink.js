@@ -160,7 +160,7 @@ export class DataSink {
   _getRowIndex(rowId){
     const rowIndex = this.idIndexes[rowId];
     if (typeof rowIndex === 'undefined'){
-      throw new Error("Attempting to remove a row that doesn't exist " + rowId + ' with ' + JSON.stringify(row));
+      throw new Error("Attempting to remove a row that doesn't exist " + rowId);
     }
     return rowIndex;
   }
