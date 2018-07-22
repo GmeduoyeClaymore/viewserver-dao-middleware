@@ -24,7 +24,7 @@ export default class DimensionSubscriptionStrategy{
 
   updateSubscription(options){
     if (this.subscribeCommand === undefined){
-      this.subscribeCommand = this.client.subscribeToDimension(this.dimension, this.dataSouceName, this.reportContext, options, this.dataSink);
+      this.subscribeCommand = this.client.subscribeToDimension(this.dimension, this.reportContext, options, this.dataSink);
     } else {
       this.client.updateSubscription(this.subscribeCommand.id, options, this.dataSink);
     }
