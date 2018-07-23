@@ -1,15 +1,11 @@
 import {debounce} from 'lodash';
 export default class DimensionSubscriptionStrategy{
-  constructor(client, dataSouceName, reportContext, dataSink, dimension){
+  constructor(client, reportContext, dataSink, dimension){
     this.client = client;
     this.dataSink = dataSink;
     this.dimension = dimension;
-    this.dataSouceName = dataSouceName;
     if (!this.dataSink){
       throw new Error('Data sink must be specified');
-    }
-    if (!this.dataSouceName){
-      throw new Error('dataSouceName must be specified');
     }
     if (!this.dimension){
       throw new Error('dimension must be specified');
