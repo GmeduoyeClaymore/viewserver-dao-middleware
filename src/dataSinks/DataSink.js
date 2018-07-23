@@ -133,7 +133,7 @@ export class DataSink {
   }
 
   onColumnAdded(colId, col){
-    Logger.fine(this.name + `column added - ${colId} -  + ${JSON.stringify(col)}`);
+    Logger.info(this.name + `column added - ${colId} -  + ${JSON.stringify(col)}`);
     const newCol = {...col, colId};
     this.schema[colId] = newCol;
     this.columnsByName[col.name] = newCol;
@@ -144,7 +144,7 @@ export class DataSink {
     if (col){
       delete this.columnsByName[col.name];
       delete this.schema[colId];
-      Logger.fine(this.name + `column removed - ${colId} -  + ${JSON.stringify(col)}`);
+      Logger.info(this.name + `column removed - ${colId} -  + ${JSON.stringify(col)}`);
     }
   }
 
