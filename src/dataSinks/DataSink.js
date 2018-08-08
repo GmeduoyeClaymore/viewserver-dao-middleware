@@ -89,7 +89,9 @@ export class DataSink {
 
   onTotalRowCount(count){
     this.totalRowCount = count;
-    Logger.info(this.name + ' - Total row count is - ' + this.totalRowCount);
+    if(Logger.isDebugEnabled()){
+      Logger.debug(this.name + ' - Total row count is - ' + this.totalRowCount);
+    }
   }
 
   onSchemaReset(){
@@ -103,7 +105,9 @@ export class DataSink {
     this.rows.push(row);
     this.dirtyRows.push(rowId);
     this._orderedRows = undefined;
-    Logger.info(this.name + ` - Row added - ${rowId} -  + ${JSON.stringify(row)}`);
+    if(Logger.isDebugEnabled()){
+      Logger.debug(this.name + ` - Row added - ${rowId} -  + ${JSON.stringify(row)}`);
+    }
   }
 
   onRowUpdated(rowId, row){
@@ -113,7 +117,9 @@ export class DataSink {
     }
     this.rows[rowIndex] = Object.assign(this.rows[rowIndex], row);
     this._orderedRows = undefined;
-    Logger.info(this.name + ' - Row updated - ' + JSON.stringify(row));
+    if(Logger.isDebugEnabled()){
+      Logger.debug(this.name + ' - Row updated - ' + JSON.stringify(row));
+    }
   }
 
   onRowRemoved(rowId){

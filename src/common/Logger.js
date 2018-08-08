@@ -68,4 +68,14 @@ export default class Logger {
   static sendServerSideLog(level, message){
     Logger.log(Logger.LogLevels.Error, `Cannot send log ${message} to server as server side error logger has not been assigned`);
   }
+
+  static isFineEnabled(){
+    return Logger.LogLevels.Fine <= Logger.LogLevel;
+  }
+  static isDebugEnabled(){
+    return Logger.LogLevels.Debug <= Logger.LogLevel;
+  }
+  static isInfoEnabled(){
+    return Logger.LogLevels.Info <= Logger.LogLevel;
+  }
 }
