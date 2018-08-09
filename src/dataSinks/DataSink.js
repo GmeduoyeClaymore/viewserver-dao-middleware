@@ -166,7 +166,7 @@ export class DataSink {
   _getRowIndex(rowId){
     const rowIndex = this.idIndexes[rowId];
     if (typeof rowIndex === 'undefined'){
-      Logger.warning(`Index doesnt exist for row ${rowId} maybe the data sink has been cleared? There are ${this.idIndexes.length} rows at present`)
+      //Logger.warning(`Index doesnt exist for row ${rowId} maybe the data sink has been cleared? There are ${this.idIndexes.length} rows at present`)
       return -1;
     }
     return rowIndex;
