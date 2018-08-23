@@ -139,7 +139,7 @@ export class DataSink {
   }
 
   onColumnAdded(colId, col){
-    Logger.info(this.name + `column added - ${colId} -  + ${JSON.stringify(col)}`);
+    Logger.debug(this.name + `column added - ${colId} -  + ${JSON.stringify(col)}`);
     const newCol = {...col, colId};
     this.schema[colId] = newCol;
     this.columnsByName[col.name] = newCol;
