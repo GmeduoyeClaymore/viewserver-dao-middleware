@@ -158,6 +158,8 @@ export default class Dao {
             Logger.info(`!!!!!Completed snapshot complete!!!! ${this.daoContext.name}`);
             resolve(ev);
             this.subscribed = true;
+            this.snapshotSubscription.unsubscribe();
+            this.snapshotSubscription = undefined;
           },
           err => reject(err)
         );
