@@ -98,7 +98,8 @@ export default class Dao {
         }
       }
 
-      if (this.daoContext.doesSubscriptionNeedToBeRecreated(this.options, newOptions) || !this.subscriptionStrategy || force || this.forceNexUpdate){
+      const isSubscriptionBeingRecreated = this.daoContext.doesSubscriptionNeedToBeRecreated(this.options, newOptions) || !this.subscriptionStrategy || force || this.forceNexUpdate;
+      if (isSubscriptionBeingRecreated){
         if (this.dataSink){
           this.dataSink.onDataReset();
         }
@@ -144,42 +145,49 @@ export default class Dao {
           this.dataRequested.next(false);
           return Promise.resolve();
         }
-        if (this.snapshotSubscription){
-          Logger.info(`!!!!!Found in flight subscription to snapshot complete cancelling !!!! ${this.daoContext.name}`);
-          this.snapshotSubscription.unsubscribe();
-          this.snapshotSubscription = undefined;
-          if (this.promiseReject){
-            this.promiseReject('Operation cancelled by another subscription operation');
-            this.promiseReject = undefined;
-          }
-        }
-        this.options = newOptions;
-        Logger.info(`Updating options to ${JSON.stringify(this.options)} ${this.daoContext.name}`);
-        this.optionsSubject.next(this.options);
-        const optionsMessage = this.daoContext.transformOptions(this.options);
-        const snapshotObservable = this.dataSink.dataSinkUpdated.waitForSnapshotComplete(10000);
-        const _this = this;
-        const result = new Promise((resolve, reject) => {
-          _this.promiseReject = resolve;
-          _this.snapshotSubscription = snapshotObservable.subscribe(
-            ev => {
-              Logger.info(`!!!!!Completed snapshot complete!!!! ${this.daoContext.name}`);
-              resolve(ev);
-              this.subscribed = true;
-              this.snapshotSubscription.unsubscribe();
-              this.snapshotSubscription = undefined;
-              this.dataRequested.next(false);
-            },
-            err => {
-              this.dataRequested.next(false);
-              reject(err)
+
+        if(isSubscriptionBeingRecreated){
+          if (this.snapshotSubscription){
+            Logger.info(`!!!!!Found in flight subscription to snapshot complete cancelling !!!! ${this.daoContext.name}`);
+            this.snapshotSubscription.unsubscribe();
+            this.snapshotSubscription = undefined;
+            if (this.promiseReject){
+              this.promiseReject('Operation cancelled by another subscription operation');
+              this.promiseReject = undefined;
             }
-          );
-        });
-        this.forceNexUpdate = false;
-        this.subscriptionStrategy.updateSubscription(optionsMessage);
-        Logger.info(`!!!!!Waiting for snapshot complete!!!! ${this.daoContext.name}`);
-        return result;
+          }
+          this.options = newOptions;
+          Logger.info(`Updating options to ${JSON.stringify(this.options)} ${this.daoContext.name}`);
+          this.optionsSubject.next(this.options);
+          const optionsMessage = this.daoContext.transformOptions(this.options);
+          const snapshotObservable = this.dataSink.dataSinkUpdated.waitForSnapshotComplete(10000);
+          const _this = this;
+          const result = new Promise((resolve, reject) => {
+            _this.promiseReject = resolve;
+            _this.snapshotSubscription = snapshotObservable.subscribe(
+              ev => {
+                Logger.info(`!!!!!Completed snapshot complete!!!! ${this.daoContext.name}`);
+                resolve(ev);
+                this.subscribed = true;
+                this.snapshotSubscription.unsubscribe();
+                this.snapshotSubscription = undefined;
+                this.dataRequested.next(false);
+              },
+              err => {
+                this.dataRequested.next(false);
+                reject(err)
+              }
+            );
+          });
+          this.forceNexUpdate = false;
+          this.subscriptionStrategy.updateSubscription(optionsMessage);
+          Logger.info(`!!!!!Waiting for snapshot complete!!!! ${this.daoContext.name}`);
+          return result;
+        }else{
+          Logger.info(`!!!!!Not Waiting for snapshot complete as we are just updating an existing subscription !!!! ${this.daoContext.name}`);
+          this.subscriptionStrategy.updateSubscription(optionsMessage);
+          return Promise.resolve();
+        }
       } catch (error){
         Logger.warning(`!!!!!Error in subscription update !!!! ${error} ${this.daoContext.name}`);
         this.dataRequested.next(false);
