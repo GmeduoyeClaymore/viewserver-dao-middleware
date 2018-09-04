@@ -90,7 +90,6 @@ export default class Dao {
 
   async updateSubscription(options, force){
 
-    try{
       this.dataRequested.next(true);
       const newOptions = {...this.options, ...options};
       if (this.daoContext.doesDataSinkNeedToBeCleared && this.daoContext.doesDataSinkNeedToBeCleared(this.options, newOptions)) {
@@ -142,6 +141,7 @@ export default class Dao {
 
       try {
         if (isEqual(this.options, newOptions) && this.subscribed && !force && !this.forceNexUpdate){
+          this.dataRequested.next(false);
           return Promise.resolve();
         }
         if (this.snapshotSubscription){
@@ -168,8 +168,12 @@ export default class Dao {
               this.subscribed = true;
               this.snapshotSubscription.unsubscribe();
               this.snapshotSubscription = undefined;
+              this.dataRequested.next(false);
             },
-            err => reject(err)
+            err => {
+              this.dataRequested.next(false);
+              reject(err)
+            }
           );
         });
         this.forceNexUpdate = false;
@@ -178,13 +182,10 @@ export default class Dao {
         return result;
       } catch (error){
         Logger.warning(`!!!!!Error in subscription update !!!! ${error} ${this.daoContext.name}`);
+        this.dataRequested.next(false);
         return Promise.reject(error);
       }
     }
-    finally{
-      this.dataRequested.next(false);
-    }
-  }
 }
 
 Dao.prototype.toJSON = function () {
