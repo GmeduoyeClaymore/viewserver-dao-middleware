@@ -16,11 +16,14 @@ const checkForErrorEventTypes = (ev) => {
   if (ev.Type ===  RxDataSink.CONFIG_ERROR){
     return Rx.Observable.throw(new Error('Subscription failed as there is a config error on the server side'));
   }
+  if (ev.Type ===  RxDataSink.ERROR){
+    return Rx.Observable.throw(new Error(ev.error));
+  }
   return Rx.Observable.of(ev);
 };
 
 Rx.Observable.prototype.waitForSnapshotComplete = function (timeout = 10000) {
-  return this.filter(ev => !!~[RxDataSink.DATA_ERROR, RxDataSink.SNAPSHOT_COMPLETE, RxDataSink.SCHEMA_ERROR,  RxDataSink.CONFIG_ERROR].indexOf(ev.Type))
+  return this.filter(ev => !!~[RxDataSink.DATA_ERROR, RxDataSink.SNAPSHOT_COMPLETE, RxDataSink.SCHEMA_ERROR,  RxDataSink.CONFIG_ERROR, RxDataSink.ERROR].indexOf(ev.Type))
     .take(1)
     .flatMap(c => checkForErrorEventTypes(c))
     .timeoutWithError(timeout, new Error(`No snapshot complete event detected ${timeout} millis seconds after update`));
