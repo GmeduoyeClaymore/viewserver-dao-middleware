@@ -162,7 +162,7 @@ export default class Dao {
           const optionsMessage = this.daoContext.transformOptions(this.options);
           const snapshotObservable = this.dataSink.dataSinkUpdated.waitForSnapshotComplete(10000);
           const _this = this;
-          const result = isSubscriptionBeingRecreated ? new Promise((resolve, reject) => {
+          const result = new Promise((resolve, reject) => {
             _this.promiseReject = resolve;
             _this.snapshotSubscription = snapshotObservable.subscribe(
               ev => {
@@ -178,13 +178,11 @@ export default class Dao {
                 reject(err)
               }
             );
-          }) : Promise.resolve();
+          });
           this.forceNexUpdate = false;
           this.subscriptionStrategy.updateSubscription(optionsMessage);
-          if(!isSubscriptionBeingRecreated){
-            this.dataRequested.next(false);
-          }
-          Logger.info(`!!!!! ${isSubscriptionBeingRecreated ? '' : 'NOT'} Waiting for snapshot complete!!!! ${this.daoContext.name}`);
+
+          Logger.info(`!!!!! Waiting for snapshot complete!!!! ${this.daoContext.name}`);
           return result;
        
       } catch (error){
