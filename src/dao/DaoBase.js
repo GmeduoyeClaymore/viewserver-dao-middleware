@@ -54,6 +54,10 @@ export default class Dao {
     return this.subject;
   }
     
+  get dataRequestedObservable(){
+    return this.dataRequested;
+  }
+    
   get optionsObservable(){
     return this.optionsSubject;
   }
@@ -88,7 +92,6 @@ export default class Dao {
 
     try{
       this.dataRequested.next(true);
-
       const newOptions = {...this.options, ...options};
       if (this.daoContext.doesDataSinkNeedToBeCleared && this.daoContext.doesDataSinkNeedToBeCleared(this.options, newOptions)) {
         if (this.dataSink){
