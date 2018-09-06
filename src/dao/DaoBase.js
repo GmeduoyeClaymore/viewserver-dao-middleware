@@ -160,7 +160,7 @@ export default class Dao {
           Logger.info(`Updating options to ${JSON.stringify(this.options)} ${this.daoContext.name}`);
           this.optionsSubject.next(this.options);
           const optionsMessage = this.daoContext.transformOptions(this.options);
-          const snapshotObservable = this.dataSink.dataSinkUpdated.waitForSnapshotComplete(10000);
+          const snapshotObservable = isSubscriptionBeingRecreated ? this.dataSink.dataSinkUpdated.waitForSnapshotComplete(10000) : Rx.Observable.of(true);
           const _this = this;
           const result = new Promise((resolve, reject) => {
             _this.promiseReject = resolve;
